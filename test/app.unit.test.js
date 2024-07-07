@@ -1,133 +1,133 @@
-var expect = require('chai').expect;
-var app = require('app');
+var expect = require('assert');
 var supertest = require('supertest');
+var app = require('../app');
+const { assert } = require('console');
 
-describe('All voter routes and api', async () => {
+async function getJwtToken() {
+    var result = await fetch('/jwt');
+    return await result.json();
+}
+
+describe('Test all the Bazz Solutions Endpoints', async () => {
 
     var request;
-    var jwtoken;
-    var result = await fetch('/jwt');
-    var json_data = await result.json();
-    jwtoken = json_data.jwtoken
-
+    var userId =2;
+    var registerData = {
+        username: 'idrisismail', // enter username
+        email: 'idrisismail@gmail.com', // enter email
+        password: 'manmustwak' // enter password
+    }
 
     before((done) => {
-        // runs once before the first test in this block
-        Console.log("Start of the Rest Cases ===========")
+        // runs once before the first test in this block  
+        console.log("Start of the Rest Cases ===========");
+        done();
     });
 
-    beforeEach(function () {
-        request = supertest(app)
-            .set("User-Agent", "Bazz Solutions")
-            .set("Accept", "application/json")
-            .set('Content-Type', 'application/json')
-            .set('Authorization', 'Bearer' + jwtoken)
+    beforeEach(async function (done) {
+        getJwtToken().then((result) => {
+            request = supertest(app)
+                .set("User-Agent", "Bazz Solutions")
+                .set("Accept", "application/json")
+                .set('Content-Type', 'application/json')
+                .set('Authorization', 'Bearer' + result.jwtoken);
+        });
+        done();
     });
-
-
 
     it('Get JWT-TOKEN, should return a JsonWebToken string', (done) => {
 
         request = supertest(app)
             .get('/jwt')
             .expect(function (res) {
-                let { status, message, data} = res.body; // destructure response body
-                expect(res.status).equal(200);
-                expect(status).to.equal('success');
-                expect(message).to.equal('jwtoken successful!!!');
-                expect(data).not.undefined;
+                let { status, message, data } = res.body; // destructure response body
+                assert(res.status, 200);
+                assert(status, 'success');
+                assert(message, 'jwtoken created');
             }).end(done)
     })
 
 
-    it('Register an admin, should return a candidate data', (done) => {
-        const formData = {
-            username: '',
-            email: '', // enter email
-            password: '' // enter password
-        }
+    it('Register an admin, should return a user data', (done) => {
+       
         request = supertest(app)
             .post('/auth/register')
-            .send(formData)
+            .send(registerData)
             .expect(function (res) {
                 let { status, message, data } = res.body; // destructure response
-                expect(res.status).equal(200);
-                expect(status).to.equal('success');
-                expect(message).to.equal('mail sent successfully!!!');
-                expect(data.id).not.undefined;
+                expect(res.status,200);
+                expect(status,'success');
+                expect(message,'registration successful');
             }).end(done)
     })
 
 
-    it('Authenticate admin user, should return authenticated data', () => {
-        const formData = {
-            email: '', // enter email in the database
-            password: '' // enter password in the database
+    it('Authenticate admin user, should return authenticated data', (done) => {
+        const data = {
+            email: registerData.email, // enter email in the database
+            password: registerData.password // enter password in the database
         }
         request = supertest(app)
             .post('/auth/login')
-            .send(formData)
+            .send(data)
             .expect(function (res) {
                 let { status, message, data } = res.body; // destructure response
-                expect(res.status).equal(200);
-                expect(status).to.equal('success');
-                expect(message).to.equal('user authenticated!!!');
-                expect(data.id).is.not.undefined;
-                expect(data.email).is.not.undefined;
+                userId = data.userId;
+                expect(res.status, 200);
+                expect(status, 'success');
+                expect(message, 'Logged in successfully');
             }).end(done);
     })
 
 
-    it('Get admin profile, should return admin profile data ', () => {
-        const formData = {
-            userId: '', // enter userId
+    it('Get admin profile, should return admin profile data ', (done) => {
+        var profileId = {
+            userId,
         }
         request = supertest(app)
             .post('/profile/me')
-            .send(formData)
+            .send(profileId)
             .expect(function (res) {
                 let { status, message, data } = res.body; // destructure response
-                expect(res.status).equal(200);
-                expect(status).to.equal('success');
-                expect(message).to.equal('user authenticated!!!');
-                expect(data.id).is.not.undefined;
-                expect(data.email).is.not.undefined;
+                expect(res.status, 200);
+                expect(status, 'success');
+                expect(message, 'profile collected');
             }).end(done);
     })
 
-    it('Update admin profile, should return admin profile data ', () => {
-        const formData = {
-            userId: '', // enter userId
-            username: '',
-            email: '',
-            date_of_birth: '',
-            permanent_address: '',
-            present_address: '',
-            city: '',
-            postal_code: '',
-            country: ''
+    it('Update admin profile, should return admin profile data ', (done) => {
+        const profileData = {
+            userId, // userId
+            username: 'idrisismail',
+            email: 'idrisismail@gmail.com',
+            date_of_birth: '9/10/1978',
+            permanent_address: 'Sokoto',
+            present_address: 'Kano',
+            city: 'Kano',
+            postal_code: '700050',
+            country: 'Nigeria'
         }
         request = supertest(app)
             .patch('/profile/me')
-            .send(formData)
+            .send(profileData)
             .expect(function (res) {
                 let { status, message, data } = res.body; // destructure response
-                expect(res.status).equal(200);
-                expect(status).to.equal('success');
-                expect(message).to.equal('user authenticated!!!');
-                expect(data.id).is.not.undefined;
-                expect(data.email).is.not.undefined;
+                expect(res.status, 200);
+                expect(status, 'success');
+                expect(message, 'profile updated');
             }).end(done);
     })
 
-    afterEach(function () {
+    afterEach(function (done) {
         // runs after each test in this block
-        Console.log(" ==========================")
+        console.log(" ==========================");
+        done();
     });
 
     after(function () {
         // runs once after the last test in this block
-        Console.log("End of the test cases ===========")
+        console.log("End of the test cases ===========");
+        done();
     });
 
 

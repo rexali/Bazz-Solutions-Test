@@ -11,7 +11,6 @@ function hashpass(userPassword) {
     let hash = bcrypt.hashSync(userPassword, salt);
     return hash; // store return hash in DB
 }
-
 /**
  * Check whether user credentials are valid
  * @param {string} DBpassword 

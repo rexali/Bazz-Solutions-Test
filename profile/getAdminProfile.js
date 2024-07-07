@@ -14,10 +14,11 @@ const getAdminProfile = async (req, res) => {
         const { userId } = req.body;
         const escape_userId = [userId]; // protect against sql injection attack
         // convert the admin profile object to json object
-        res.json(
-            // get the admin object
-            await transact(sql, escape_userId)
-        )
+        res.status(200).json({
+            status: "success",
+            message: "profile collected",
+            data: await transact(sql, escape_userId)
+        })
     } catch (error) {
         // catch  the error
         console.warn(error);

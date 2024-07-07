@@ -103,5 +103,5 @@ app.listen(PORT, HOST, () => {
     console.log(`The server host is ${HOST} and is listening at port ${PORT}`);
 });
 // make app object available to the whole application
-module.exports = {app};
+module.exports = app;
 

@@ -43,7 +43,11 @@ const updateAdminProfile = async (req, res) => {
         // check that an update is made to the table
         if (result.affectedRows === 1) {
             // convert to json
-            res.json(result);
+            res.status(200).json({
+                status: "success",
+                message: "profile updated",
+                data: result
+            })
         }
     } catch (error) {
         console.warn(error);
