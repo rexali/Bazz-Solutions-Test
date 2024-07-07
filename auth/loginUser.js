@@ -18,56 +18,78 @@ const loginUser = async (req, res) => {
         // get email and password
         const { email, password } = req.body;
         //   check if email and password are not null
-        if (email & password) {
+        if (!email) {
 
             let error_response = {
                 error: 404,
-                message: "email or password missing"
+                message: "email missing"
             };
 
             res.json({
                 result:
-                    false,       
+                    false,
                 ...error_response
             });
         }
-        // make safe email and password by escaping html elements
-        const newPassword = escapeHTML(password);
-        const newEmail = escapeHTML(email);
-        // sql input data to be escape
-        const esc = [newEmail];
-        //  prepare sql
-        const sql = `SELECT password FROM users WHERE email = ?`;
-        // get store password
-        const DbPassword = await getUserPassword(sql, esc);
-        // check to see is not empty
-        if (!DbPassword) {
+
+        if (!password) {
 
             let error_response = {
                 error: 404,
-                message: "email or password missing"
+                message: "password missing"
             };
 
-            res.json({ result: false, ...error_response });
-        }
-    //    verify the password with a given password 
-        if (checkpass(DbPassword, newPassword)) {  
-            const sql = `SELECT userId, email, role FROM users WHERE email = ?`;
-            const { token, userId, email, role} = await getUserToken(sql, esc);
-
-            res.cookie('token', token, { httpOnly: true, secure: false });
-
             res.json({
-                result: true,
-                token,
-                userId,
-                email,
-                role
+                result:
+                    false,
+                ...error_response
             });
+        }
+        //  check if both email and password provided
+        if (email && password) {
+            // make safe email and password by escaping html elements
+            const newPassword = escapeHTML(password);
+            const newEmail = escapeHTML(email);
+            // sql input data to be escape
+            const esc = [newEmail];
+            //  prepare sql
+            const sql = `SELECT password FROM users WHERE email = ?`;
+            // get store password
+            const DbPassword = await getUserPassword(sql, esc);
+            // check to see is not empty
+            if (!DbPassword) {
+
+                let error_response = {
+                    error: 404,
+                    message: "email or password missing"
+                };
+
+                res.json({ result: false, ...error_response });
+            }
+            // verify the password with user given password 
+            if (checkpass(DbPassword, newPassword)) {
+                const sql = `SELECT userId, email FROM users WHERE email = ?`;
+                const { token, userId, email} = await getUserToken(sql, esc);
+
+                res.cookie('token', token, { httpOnly: true, secure: false });
+
+                res.json({
+                    result: true,
+                    token,
+                    userId,
+                    email
+                });
+            } else {
+                res.json({
+                    result: false,
+                    error: 'password mismatch',
+                });
+            }
+
         } else {
             res.json({
                 result: false,
-                error:'password mismatch',
+                error: 'password or email missing',
             });
         }
 

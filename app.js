@@ -1,16 +1,18 @@
+// import required modules
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const jsonwebtoken = require("jsonwebtoken");
 const { expressjwt } = require("express-jwt");
 const dotenv = require('dotenv');
+// initiatize the .env
 dotenv.config();
-
-// import routes
+// import auth and admin profile routes
 const { authRouter } = require("./auth/authRoutes");
+const {adminProfileRouter} = require("./profile/adminProfileRoutes")
 // import error and log handlers
 const { logHandler } = require("./utils/logHandler");
 const { errorHandler } = require("./utils/errorHandler");
-
 // instantiate express
 const app = express();
 // port
@@ -33,19 +35,24 @@ app.set('views', 'views');
 app.use(errorHandler);
 //log request info in the console
 app.use(logHandler);
-// use this public files
+// use this public files e.g., for image files etc
 app.use(express.static('public'));
 
-// routes
+// define routes
 app.use("/auth", authRouter);
+app.use("/profile", adminProfileRouter);
 
 // verify jwt 
 app.use(expressjwt({
+    // secret key
     secret: process.env.SECRET_KEY,
+    // get the token
     getToken: req => {
-        try {
+        try { 
+            // get the jwtoken from the authorization header or cookie
             return req.headers.authorization?.split(' ')[1] || req.cookies.jwtoken;
         } catch (error) {
+            // catch an error
             console.warn(error);
         }
     },
@@ -64,9 +71,25 @@ app.get("/", (req, res) => {
         // render home page
         res.render("home", {});
     } catch (error) {
+        // catch error
         console.warn(error);
     }
 });
+// get json web token
+app.get("/jwt", (req, res) => {
+    try {
+        // get a signed token
+         const jwtoken = jsonwebtoken.sign({ user: "aly" }, process.env.SECRET_KEY);
+        //  store in secured cookie
+         res.cookie('jwtoken', jwtoken, { httpOnly: true });
+        //  turn the token to json
+         res.json({ jwtoken: jwtoken })
+    } catch (error) {
+        // catch error
+         console.warn(error);
+    }
+});
+// use to catch not-found resources
 app.use((req, res) => {
     try {
         // render not-found page
@@ -77,8 +100,9 @@ app.use((req, res) => {
 });
 // listent to server  
 app.listen(PORT, HOST, () => {
+    // log to the console
     console.log(`The server host is ${HOST} and is listening at port ${PORT}`);
 });
-
+// make app object available to the whole application
 module.exports = app;
 

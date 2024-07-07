@@ -20,14 +20,14 @@ async function getUserToken(sql, esc) {
         if (err) {
           reject(err);
         }
-        const [{ userId, email, role }] = result;
+        const [{ userId, email}] = result;
         const jwtSecret = process.env.SECRET_KEY;
         const token = jsonwebtoken.sign(
           { result },
           jwtSecret,
           { noTimestamp: true, expiresIn: '24h' }
         );
-        resolve({ token, userId, email, role })
+        resolve({ token, userId, email})
       });
     });
 
