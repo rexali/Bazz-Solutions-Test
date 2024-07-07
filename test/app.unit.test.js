@@ -31,7 +31,7 @@ describe('All voter routes and api', async () => {
         request = supertest(app)
             .get('/jwt')
             .expect(function (res) {
-                let { status, message, data: { jwtoken } } = res.body; // destructure response body
+                let { status, message, data} = res.body; // destructure response body
                 expect(res.status).equal(200);
                 expect(status).to.equal('success');
                 expect(message).to.equal('jwtoken successful!!!');

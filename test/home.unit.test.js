@@ -1,8 +1,8 @@
-var app = require('server')
+var app = require('app')
 var supertest = require('supertest');
 var cheerio = require('cheerio');
 
-describe('test home page', (done) => {
+describe('test server home page', (done) => {
     var request;
 
     beforeEach(function () {
@@ -19,24 +19,24 @@ describe('test home page', (done) => {
             .end(done);
     });
 
-    it('should return Register/ Sign in for the company', function (done) {
+    it('should return Bazz Solutions Test', function (done) {
         request.expect(function (res) {
             let htmlRes = res.text;
             let $ = cheerio.load(htmlRes);
-            let registerHeaderTest = $('.register').html().trim()
-            if (registerHeaderTest !== 'Register/ Sign in for the company') {
+            let registerHeaderTest = $('.title').html().trim()
+            if (registerHeaderTest !== 'Bazz Solutions Test') {
                 throw new Error('Not found')
             }
         }).end(done);
     });
 
-    it("it should return 'Sign in for Voters!'", function (done) {
+    it("it should return 'Hello, the server is runing'", function (done) {
         request.expect(function (res) {
             let htmlRes = res.text;
             let $ = cheerio.load(htmlRes);
-            let loginHeaderText = $('.signin').html().trim();
-            if (loginHeaderText==='Sign in for Voters!') {
-                throw new Error(`'Sign in for Voters!' is Not found`)
+            let loginHeaderText = $('.paragraph').html().trim();
+            if (loginHeaderText === 'the server is runing') {
+                throw new Error(`'the server is runing' is Not found`)
             }
         }).end(done)
     })

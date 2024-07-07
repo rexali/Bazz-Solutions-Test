@@ -34,15 +34,10 @@ const loginUser = async (req, res) => {
 
         if (!password) {
 
-            let error_response = {
-                error: 404,
-                message: "password missing"
-            };
-
-            res.json({
-                result:
-                    false,
-                ...error_response
+            res.status(404).json({
+                status:"fail",
+                message:"password missing",
+                data:{}
             });
         }
         //  check if both email and password provided
@@ -59,12 +54,11 @@ const loginUser = async (req, res) => {
             // check to see is not empty
             if (!DbPassword) {
 
-                let error_response = {
-                    error: 404,
-                    message: "email or password missing"
-                };
-
-                res.json({ result: false, ...error_response });
+                res.status(404).json({
+                    status:"fail",
+                    message:"email or password missing",
+                    data:{}
+                });
             }
             // verify the password with user given password 
             if (checkpass(DbPassword, newPassword)) {
@@ -72,28 +66,38 @@ const loginUser = async (req, res) => {
                 const { token, userId, email} = await getUserToken(sql, esc);
 
                 res.cookie('token', token, { httpOnly: true, secure: false });
+                
+                res.status(200).json({
+                    status:"success",
+                    message:"Logged in successfully",
+                    data:{
+                        token,
+                        userId,
+                        email  
+                    }
+                });
 
-                res.json({
-                    result: true,
-                    token,
-                    userId,
-                    email
-                });
             } else {
-                res.json({
-                    result: false,
-                    error: 'password mismatch',
+
+                res.status(404).json({
+                    status:"fail",
+                    message:"password mismatch",
+                    data:{}
                 });
+
+                
             }
 
         } else {
-            res.json({
-                result: false,
-                error: 'password or email missing',
+            res.status(404).json({
+                status:"fail",
+                message:"email or password missing",
+                data:{}
             });
         }
 
     } catch (error) {
+        // catch error
         console.warn(error);
     } finally {
         // release path for other

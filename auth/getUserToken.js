@@ -17,22 +17,26 @@ async function getUserToken(sql, esc) {
   try {
     const tokenPromise = new Promise((resolve, reject) => {
       connectDb().query(sql, esc, function (err, result, fields) {
+        // check if error
         if (err) {
           reject(err);
         }
+        // get userId and email
         const [{ userId, email}] = result;
+        // get the secret key
         const jwtSecret = process.env.SECRET_KEY;
-        const token = jsonwebtoken.sign(
-          { result },
-          jwtSecret,
-          { noTimestamp: true, expiresIn: '24h' }
+        // sign the token which expires after 24 hours
+        const token = jsonwebtoken.sign({ result },jwtSecret,{noTimestamp: true, expiresIn: '24h'}
         );
+        // resolve
         resolve({ token, userId, email})
       });
     });
-
+    // return promise
     return tokenPromise;
+    // catch error
   } catch (error) {
+    // log error
     console.log(error);
   } finally {
     // release path for other

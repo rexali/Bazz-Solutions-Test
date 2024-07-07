@@ -1,22 +1,38 @@
 # Bazz Solutions Test
 
-1. Clone the repository
+1. Clone the repository: https://github.com/rexali/Bazz-Solutions-Test.git 
 
-2. Run: npm install
+2. Run in your terminal: 'cd Bazz-Solutions-Test'
 
-3. Create a MYSQL
+3. Run: npm install
+
+4. Create a MYSQL
    1. database named "bazzdb",
    2. table named 'users' table with columns: username, email and password as columns,
    3. table named 'profile' for an admin profile with columns: username, email, date_of_birth, permanent_address, current_address, city, country, zip_code
 
-3. Then run: npm start 
+5. Add new .env file to root folder and then add the following configuration
+  
+    1. DB_HOST=localhost
+    2. DB_PORT= <db port>
+    3. DB_USER= <db username>
+    4. DB_PASS= <db password>
+    5. DB_NAME=bazzdb
+    6. SECRET_KEY=asdfghjkil
 
-4. use Postman
+6. Then run: npm start 
+
+
+7. use Postman and use the headers and body data below in the cURL Commands or in the documentation
    1. GET http://localhost:3001/jwt 
    2. POST http://localhost:3001/auth/register
    3. POST http://localhost:3001/auth/login
+   4. POST http://localhost:3001/profile/me
+   5. PATCH http://localhost:3001/profile/me
 
-5. Curl commands:
+OR USE
+
+8. Curl Commands:
 
     1. To get jwtoken as soon as user load the page to protect routes and validate the JWT token.
       Run:  curl --request GET http://localhost:3001/jwt 
@@ -32,6 +48,11 @@
 
     5. To get an admin user profile,
       Run:  curl -d '{"userId": 1, "email":"admin@bazzsolutions.com", "date_of_birth":"6/7/1960", "permanent_address":"28 Enyinare Quarters, Okene, Kogi State", "present_address":"463 N-Tsakiya, Kumbotso, Kano State", "city":"Kano", "postal_code":"70001", "country":"Nigeria"}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X PATCH http://localhost:3001/profile/me
+
+
+# Test: Unit Test
+
+Run in your terminal: npm test
 
 
 

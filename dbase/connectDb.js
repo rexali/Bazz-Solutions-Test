@@ -14,8 +14,8 @@ function connectDb() {
     try {
         const conn = mysql.createConnection({
             host: process.env.DB_POST, //"3306",
-            user: process.env.DB_USER, //"root",
-            password: process.env.DB_PASS, //"rexali",
+            user: process.env.DB_USER, //"db username",
+            password: process.env.DB_PASS, //"db password",
             database: process.env.DB_NAME, // "bazzdb",
         });
     

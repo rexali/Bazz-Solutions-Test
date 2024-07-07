@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 // import auth and admin profile routes
 const { authRouter } = require("./auth/authRoutes");
-const {adminProfileRouter} = require("./profile/adminProfileRoutes")
+const { adminProfileRouter } = require("./profile/adminProfileRoutes")
 // import error and log handlers
 const { logHandler } = require("./utils/logHandler");
 const { errorHandler } = require("./utils/errorHandler");
@@ -35,9 +35,6 @@ app.set('views', 'views');
 app.use(errorHandler);
 //log request info in the console
 app.use(logHandler);
-// use this public files e.g., for image files etc
-app.use(express.static('public'));
-
 // define routes
 app.use("/auth", authRouter);
 app.use("/profile", adminProfileRouter);
@@ -48,7 +45,7 @@ app.use(expressjwt({
     secret: process.env.SECRET_KEY,
     // get the token
     getToken: req => {
-        try { 
+        try {
             // get the jwtoken from the authorization header or cookie
             return req.headers.authorization?.split(' ')[1] || req.cookies.jwtoken;
         } catch (error) {
@@ -79,22 +76,24 @@ app.get("/", (req, res) => {
 app.get("/jwt", (req, res) => {
     try {
         // get a signed token
-         const jwtoken = jsonwebtoken.sign({ user: "aly" }, process.env.SECRET_KEY);
-        //  store in secured cookie
-         res.cookie('jwtoken', jwtoken, { httpOnly: true });
+        const jwtoken = jsonwebtoken.sign({ user: "aly" }, process.env.SECRET_KEY);
+        //  store in a secured cookie
+        res.cookie('jwtoken', jwtoken, { httpOnly: true });
         //  turn the token to json
-         res.json({ jwtoken: jwtoken })
+        res.status(200).json({ status: "success", message: "token created", data: {jwtoken} });
     } catch (error) {
         // catch error
-         console.warn(error);
+        console.warn(error);
     }
 });
 // use to catch not-found resources
 app.use((req, res) => {
     try {
-        // render not-found page
-        res.status(404).render("404", {});
+        // return json
+        res.status(404).json({ status: "fail", message: "page not found", data: {} });
+        // catch error
     } catch (error) {
+        // log error
         console.warn(error);
     }
 });
@@ -104,5 +103,5 @@ app.listen(PORT, HOST, () => {
     console.log(`The server host is ${HOST} and is listening at port ${PORT}`);
 });
 // make app object available to the whole application
-module.exports = app;
+module.exports = {app};
 
