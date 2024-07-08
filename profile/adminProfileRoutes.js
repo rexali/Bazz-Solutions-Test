@@ -6,11 +6,9 @@ const { updateAdminProfile } = require("./updateAdminProfile");
 // initialize admin profile router
 const adminProfileRouter = express.Router();
 // get a particular admin profile
-// adminProfileRouter.get('me/:id', getAdminProfile);
-adminProfileRouter.get('/me', getAdminProfile);
+adminProfileRouter.get('/', getAdminProfile);
 // update an admin profile
-// adminProfileRouter.patch("/me/:id", updateAdminProfile);
-adminProfileRouter.patch("/me", updateAdminProfile);
+adminProfileRouter.patch("/", updateAdminProfile);
 // export the profile router to make it available
 module.exports = {
     adminProfileRouter

@@ -8,11 +8,12 @@ const dotenv = require('dotenv');
 // initiatize the .env
 dotenv.config();
 // import auth and admin profile routes
-const { authRouter } = require("./auth/authRoutes");
 const { adminProfileRouter } = require("./profile/adminProfileRoutes")
 // import error and log handlers
 const { logHandler } = require("./utils/logHandler");
 const { errorHandler } = require("./utils/errorHandler");
+const { loginUser } = require("./auth/loginUser");
+const { registerUser } = require("./auth/registerUser");
 // instantiate express
 const app = express();
 // port
@@ -36,8 +37,9 @@ app.use(errorHandler);
 //log request info in the console
 app.use(logHandler);
 // define routes
-app.use("/auth", authRouter);
-app.use("/profile", adminProfileRouter);
+app.use("/login", loginUser);
+app.use("/register",registerUser);
+app.use('/me', adminProfileRouter)
 
 // verify jwt 
 app.use(expressjwt({

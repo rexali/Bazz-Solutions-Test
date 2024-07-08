@@ -20,15 +20,10 @@ const loginUser = async (req, res) => {
         //   check if email and password are not null
         if (!email) {
 
-            let error_response = {
-                error: 404,
-                message: "email missing"
-            };
-
-            res.json({
-                result:
-                    false,
-                ...error_response
+            res.status(404).json({
+                status:"fail",
+                message:"email missing",
+                data:{}
             });
         }
 
@@ -77,16 +72,14 @@ const loginUser = async (req, res) => {
                     }
                 });
 
-            } else {
-
-                res.status(404).json({
-                    status:"fail",
-                    message:"password mismatch",
-                    data:{}
-                });
-
-                
-            }
+            } 
+            // else {
+            //     res.status(404).json({
+            //         status:"fail",
+            //         message:"password mismatch",
+            //         data:{}
+            //     });    
+            // }
 
         } else {
             res.status(404).json({
