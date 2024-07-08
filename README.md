@@ -45,17 +45,17 @@
     
 8. use Postman and use the headers and body data below in the cURL Commands or in the documentation below:
    1. GET http://localhost:3001/jwt 
-   2. POST http://localhost:3001/auth/register
-   3. POST http://localhost:3001/auth/login
-   4. GET http://localhost:3001/profile/me
-   5. PATCH http://localhost:3001/profile/me
+   2. POST http://localhost:3001/register
+   3. POST http://localhost:3001/login
+   4. GET http://localhost:3001/me
+   5. PATCH http://localhost:3001/me
 
 
 
 # Test: Unit Test
 
   1. Note: Before you run the test make sure you stop the server
-  2. Create test database (bazzdb), test tables (users, profile) or use the same database and tables u created befor
+  2. Create test database (bazzdb), test tables (users, profile) or use the same database and tables u created before
   3. Then in your command terminal, run: npm test
 
 
