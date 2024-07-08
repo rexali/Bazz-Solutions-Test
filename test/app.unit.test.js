@@ -42,7 +42,7 @@ describe('Test all the Bazz Solutions Endpoints', async () => {
     })
 
 
-    it('Register an admin, should return a user data', (done) => {
+    it('Register an admin user, should return a user data', (done) => {
 
         request = supertest(app)
             .post('/register')
@@ -73,7 +73,7 @@ describe('Test all the Bazz Solutions Endpoints', async () => {
     })
 
 
-    it('Get admin profile, should return admin profile data ', (done) => {
+    it('Get admin user profile, should return admin profile data ', (done) => {
         var profileId = {
             userId: 1
         }
@@ -90,7 +90,7 @@ describe('Test all the Bazz Solutions Endpoints', async () => {
 
     it('Update admin profile, should return admin profile data ', (done) => {
         const profileData = {
-            userId:6, // userId
+            userId:1,
             username: 'idrisismail',
             email: 'idrisismail@gmail.com',
             date_of_birth: '9/10/1978',

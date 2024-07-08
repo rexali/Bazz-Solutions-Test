@@ -73,13 +73,6 @@ const loginUser = async (req, res) => {
                 });
 
             } 
-            // else {
-            //     res.status(404).json({
-            //         status:"fail",
-            //         message:"password mismatch",
-            //         data:{}
-            //     });    
-            // }
 
         } else {
             res.status(404).json({
