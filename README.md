@@ -55,7 +55,8 @@
 # Test: Unit Test
 
   1. Note: Before you run the test make sure you stop the server
-  2. Then in your command terminal: npm test
+  2. Create test database (bazzdb), test tables (users, profile) or use the same database and tables u created befor
+  3. Then in your command terminal, run: npm test
 
 
 # Endpoint Documentation : Bazz Solutions Test Endpoints
@@ -173,7 +174,7 @@ GET '/me'
 }
 
 
-PATCH '/profile/me'
+PATCH '/me'
 
 - Sends an admin profile data with multiple keys in order to update or patch some of the data in admin profile.
 
