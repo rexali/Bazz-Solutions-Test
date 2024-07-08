@@ -53,9 +53,8 @@ OR USE
 
 # Test: Unit Test
 
-Run in your terminal: npm test
-
-
+  1. Note: Before you run the test make sure you stop the server
+  2. Then in your command terminal: npm test
 
 
 # Endpoint Documentation : Bazz Solutions Test Endpoints
