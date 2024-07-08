@@ -14,41 +14,42 @@
 5. Add new .env file to root folder and then add the following configuration:
   
     1. DB_HOST=localhost
-    2. DB_PORT= <your database port>
-    3. DB_USER= <your database username>
-    4. DB_PASS= <your database password>
+    2. DB_PORT= <your database port>  // your database port
+    3. DB_USER= <your database username> // your database username
+    4. DB_PASS= <your database password> your database password
     5. DB_NAME= bazzdb
     6. SECRET_KEY=asdfghjkil
 
 6. Then run: npm start 
 
 
-7. use Postman and use the headers and body data below in the cURL Commands or in the documentation
+7. Curl Commands:
+
+    1. To get jwtoken as soon as user load the page to protect routes and validate the JWT token.
+      Run:  ***curl --request GET http://localhost:3001/jwt*** 
+
+    2. To rgister a user using the jwtoken as a pass in request headers, 
+      Run:  ***curl -d '{"username": "admin","email": "admin@bazzsolutions.com","password": "bazzsolution001"}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X POST http://localhost:3001/register***
+
+    3. To log in and verify a user using the same jwtoken pass in request headers;
+      Run:  ***curl -d '{"email": "admin@bazzsolutions.com","password": "bazzsolution001"}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X POST http://localhost:3001/login***
+
+    4. To get an admin user profile using the same jwtoken pass in request headers,
+      Run:  ***curl -d '{"userId": 1}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X GET http://localhost:3001/me***
+
+    5. To update an admin user profile using the same jwtoken pass in request headers and the login token in body to verify if admin has a right to update the profile,
+      Run:  ***curl -d '{"userId": 1, "email":"admin@bazzsolutions.com", "date_of_birth":"6/7/1960", "permanent_address":"28 Enyinare Quarters, Okene, Kogi State", "present_address":"463 N-Tsakiya, Kumbotso, Kano State", "city":"Kano", "postal_code":"70001", "country":"Nigeria", token:}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X PATCH http://localhost:3001/me***
+
+
+# OR USE
+    
+8. use Postman and use the headers and body data below in the cURL Commands or in the documentation below:
    1. GET http://localhost:3001/jwt 
    2. POST http://localhost:3001/auth/register
    3. POST http://localhost:3001/auth/login
    4. GET http://localhost:3001/profile/me
    5. PATCH http://localhost:3001/profile/me
 
-OR USE
-
-8. Curl Commands:
-
-    1. To get jwtoken as soon as user load the page to protect routes and validate the JWT token.
-      Run:  curl --request GET http://localhost:3001/jwt 
-
-    2. To rgister a user using the jwtoken as a pass in request headers, 
-      Run:  curl -d '{"username": "admin","email": "admin@bazzsolutions.com","password": "bazzsolution001"}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X POST http://localhost:3001/register
-
-    3. To log in and verify a user using the same jwtoken pass in request headers;
-      Run:  curl -d '{"email": "admin@bazzsolutions.com","password": "bazzsolution001"}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X POST http://localhost:3001/login
-
-    4. To get an admin user profile using the same jwtoken pass in request headers,
-      Run:  curl -d '{"userId": 1}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X GET http://localhost:3001/me
-
-    5. To update an admin user profile using the same jwtoken pass in request headers and the login token in body to verify if admin has a right to update the profile,
-      Run:  curl -d '{"userId": 1, "email":"admin@bazzsolutions.com", "date_of_birth":"6/7/1960", "permanent_address":"28 Enyinare Quarters, Okene, Kogi State", "present_address":"463 N-Tsakiya, Kumbotso, Kano State", "city":"Kano", "postal_code":"70001", "country":"Nigeria", token:}' -H "Content-Type:application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWx5IiwiaWF0IjoxNzIwMjYxOTE4fQ.35XWUPp5aK1wxTpOLCVUqwojU7FqEr5LrkNq8ehXO-s" -X PATCH http://localhost:3001/me
-    
 
 
 # Test: Unit Test
